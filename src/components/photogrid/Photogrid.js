@@ -5,59 +5,59 @@ import Modal from '../modal/index'
 
 function Photogrid() {
     const [recent , setRecent] = useState([])
-    const [showItems , setShowItems] = useState([])
-    const [items , setItems] = useState(0);
-    const [scroll, setscroll] = useState(0)
-    const [hasmore, sethasmore] = useState(true)
     const [modalData , setModalData] = useState('')
-    const [modal , setModal] = useState(false)
+    const [modal , setModal] = useState(false);
+    const [page, setPage] = useState(1)
 
-
-    window.onscroll = function(){
-        if((window.scrollY > window.innerHeight + scroll) && hasmore ){
-            loadMore();
-            setscroll(window.scrollY)
-        }
-    }
     const closeModal = () => {
         setModal(false)
     }
-    useEffect(() => {
-       fetchData('recent')
-       .then(data =>  { const recentResults = data.photos.photo.map( (item , i) => {
+
+    // let timer ;
+
+    // const checkScroll = (e) => {
+    // if(e.target.scrollHeight <= e.target.scrollTop + e.target.clientHeight){
+    //             fetchRecent(page)
+        
+    // }
+        
+    // }
+
+    const fetchRecent = (page) => {
+        fetchData({option:'recent',page:page})
+       .then(data =>  { 
+           const recentResults = data.photos.photo.map( (item ) => {
            const srcPath = `https://farm${item.farm}.staticflickr.com/${item.server}/${item.id}_${item.secret}.jpg`
-           return <div className="photoGrid-item" key={item.id}>
+           return <div className="photoGrid-item" >
                         <img onClick={() =>  { setModalData(srcPath) 
                                                 setModal(true) }} alt={item.title}  src={srcPath} />
                   </div>
        })
-        setRecent(recentResults)
-        let arr = []
-        for (let i = items; i < items + 20; i++) {
-            arr.push(recentResults[i])
-        }
-        setShowItems(arr)
-        setItems(20)
-             })  
-    }, [items])
-
-    const loadMore  = () => {
-        if(items === 100){
-           return sethasmore(false)
-        }else{
-            let arr = []
-            for (let i = items; i < items + 20; i++) {
-                arr.push(recent[i])
-            }
-            setShowItems(showItems.concat(arr))
-            setItems(items + 20)
-        }
+        setRecent(recent.concat(recentResults))
+        setPage(page + 1)
+     }) 
     }
+
+    useEffect(() => {
+        fetchRecent(1);        
+    }, [])
+    
+    // useEffect(() => {
+    //     document.querySelector('.photoGrid-container')
+    //     .addEventListener('scroll',checkScroll);
+    //     return () => {
+    //         document.querySelector('.photoGrid-container')
+    //         .removeEventListener('scroll',checkScroll); 
+    //     }
+    // }, [])
+
+    
     return (    <>
                 <div className="photoGrid-container">          
-                    {showItems}
+                    {recent}
                 </div>
                 {modalData && modal ? <Modal picData={modalData} closeModal={closeModal} /> : ''}
+                <button className="loadMore" onClick={() => fetchRecent(page)}>Load More</button>
                 </>
         
     )

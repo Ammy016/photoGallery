@@ -31,6 +31,7 @@
 .searchResults::-webkit-scrollbar {
     display: none;
   }
+  
 .searchResults > ul {
     list-style: none;
     padding-inline-start: 0%;
@@ -66,12 +67,12 @@
     padding: 5px 15px;
     margin-bottom: 15px;
 }
-.fixed{
-    position: fixed;
-    top: 10px;
-}
+
 
 @media (min-width:500px) and  (max-width:799px) {
+    .navbar-container{
+        padding: 0;
+    }
     .navbar-searchBar{
         width: 80%; }
     .navbar-tags{
@@ -81,9 +82,16 @@
         max-width: 80%;
         padding-right: 30px;
     }
+    .searchResults{
+        width: 80%;
+        left: 10%;
+    }
 
 }
 @media (max-width:499px) {
+    .navbar-container{
+        padding: 0;
+    }
     .navbar-searchBar{
         width: 80%; }
     .navbar-tags{
@@ -93,6 +101,10 @@
         max-width: 80%;
         padding-right: 30px;
         margin: auto;
+    }
+    .searchResults{
+        width: 80%;
+        left: 10%;
     }
 
 }

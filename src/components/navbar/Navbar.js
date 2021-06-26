@@ -31,7 +31,7 @@ function Navbar() {
         const searchTerm = input.current.value;
         let updateSearchTags = null ;
         setLoading(true)
-        fetchData('search',searchTerm)
+        fetchData({option:'search',searchTerm})
         .then(data => {setresults(data.photos.photo);
                         updateSearchTags=searchTerm
                         updateSearchHistory(updateSearchTags) })
@@ -57,9 +57,9 @@ function Navbar() {
         }
     }
 
-    const truncate =  (str,n) => {
-        return str.length > n ? str.substr(n-1) + '...' : str 
-    } 
+    // const truncate =  (str,n) => {
+    //     return str.length > n ? str.substr(n-1) + '...' : str 
+    // } 
 
     return (
         <div className="navbar-container">
@@ -73,8 +73,8 @@ function Navbar() {
                 <div className="searchResults" >
                     <ul>
                     {!totalResult && results.map( (data, index) =>{ if( index < 5 ) 
-                        return <li className="searchResults-list-item" key={data.id}>{data.title}</li> })} 
-                    {totalResult && results.map( (data, index) => <li className="searchResults-list-item" key={data.id}>{data.title}</li> )}    
+                        return <li className="searchResults-list-item" key={index}>{data.title}</li> })} 
+                    {totalResult && results.map( (data, index) => <li className="searchResults-list-item" key={index}>{data.title}</li> )}    
                     </ul>
                     { !totalResult && <div className="results-length"
                      onClick={(e) => { setTotalResults(true)
